@@ -1,0 +1,51 @@
+Conceptual Problems
+
+Jawab pertanyaan berikut:
+
+1. Jelaskan latar belakang adanya bagging dan cara kerja bagging !
+
+2. Jelaskan perbedaan cara kerja algoritma Random Forest dengan algoritma boosting yang Anda pilih !
+
+3. Jelaskan apa yang dimaksud dengan Cross Validation !
+
+
+** JAWABAN :**
+
+1. Jelaskan latar belakang adanya bagging dan cara kerja bagging!
+Bagging (Bootstrap Aggregating) muncul sebagai solusi untuk mengatasi overfitting dan variansi tinggi pada model tunggal seperti Decision Tree.
+Prinsip dasarnya adalah menggabungkan beberapa model lemah yang dilatih secara independen pada subset data yang berbeda (dibuat melalui teknik bootstrap sampling).
+Hasil akhirnya diperoleh dengan cara melakukan voting (untuk klasifikasi) atau rata-rata (untuk regresi) dari seluruh model.
+
+Dalam proyek Loan Approval Prediction ini, algoritma Random Forest menjadi contoh penerapan bagging.
+Random Forest membuat banyak Decision Tree yang masing-masing dilatih pada sampel data acak dan subset fitur acak, kemudian menggabungkan hasilnya.
+Dengan cara ini, model menjadi lebih stabil dan general dibandingkan satu pohon tunggal, karena setiap tree melihat bagian data yang berbeda.
+Hasil Cross Validation memperlihatkan bahwa Random Forest memiliki skor F1-test sebesar **0.818**, menunjukkan performa yang baik dan lebih tahan terhadap overfitting dibandingkan Decision Tree (F1-test = 0.763).
+
+---
+
+2️ Jelaskan perbedaan cara kerja algoritma Random Forest dengan algoritma boosting yang Anda pilih!
+Perbedaan mendasar antara Random Forest (bagging) dan XGBoost (boosting) terletak pada cara model-model kecil (tree) dibangun dan digabungkan.
+
+a. Pada Random Forest (bagging), setiap tree dilatih secara independen dan paralel, lalu hasilnya digabungkan menggunakan voting rata-rata. Tujuannya untuk mengurangi variansi model.
+b. Pada XGBoost (boosting), setiap tree dilatih secara berurutan (sekuensial) di mana setiap model baru berfokus untuk memperbaiki kesalahan model sebelumnya dengan menambahkan bobot lebih besar pada data yang salah prediksi. 
+Tujuannya adalah mengurangi bias dan meningkatkan akurasi.
+Dalam proyek ini, model **XGBoost** menunjukkan performa yang lebih tinggi dibandingkan Random Forest:
+
+- F1-test XGBoost = **0.841** (lebih baik dari RF = 0.818)
+- ROC-AUC XGBoost = **0.9789**
+- Akurasi model setelah tuning mencapai **94%**
+
+Performa yang lebih baik ini masuk akal karena Boosting seperti XGBoost lebih fokus pada perbaikan kesalahan secara iteratif dan mampu menangkap pola kompleks yang sulit ditangani metode bagging biasa.
+
+---
+
+3️. Jelaskan apa yang dimaksud dengan Cross Validation!
+Cross Validation adalah teknik evaluasi model untuk mengukur kemampuan generalisasi model pada data baru dengan cara membagi data menjadi beberapa subset (folds).
+Setiap iterasi, satu subset digunakan sebagai data uji (validation set), sedangkan sisanya digunakan untuk pelatihan.
+Proses ini diulang beberapa kali dan hasil performa di rata-rata untuk mendapatkan estimasi performa yang lebih stabil dan tidak bergantung pada satu pembagian data saja.
+
+Dalam proyek ini, digunakan 5-Fold Cross Validation dengan metrik F1-score melalui fungsi `cross_validate()` dari scikit-learn.
+Pendekatan ini memastikan bahwa model tidak hanya baik pada data training, tetapi juga konsisten di berbagai subset data.
+Hasilnya menunjukkan bahwa model XGBoost memiliki skor F1-test yang paling tinggi dan gap train–test kecil, sehingga dipilih sebagai best model yang paling stabil dan general.
+
+---
